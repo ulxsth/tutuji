@@ -45,6 +45,21 @@ client.on(Events.InteractionCreate, async interaction => {
   }
 });
 
+// refactor: separate file
+// when submit log modal
+client.on(Events.InteractionCreate, async interaction => {
+  if (!interaction.isModalSubmit()) return;
+  if (interaction.customId !== 'log') return;
+
+  // todo: send data to notion database
+  try {
+    await interaction.reply({ content: 'データを記録しました :coffee:', ephemeral: true });
+  } catch (error) {
+    console.error(error);
+    await interaction.reply({ content: `ERR: ${error}`, ephemeral: true });
+  }
+})
+
 client.once(Events.ClientReady, readyClient => {
   console.log(`Ready! Logged in as ${readyClient.user.tag}`);
 });
