@@ -1,9 +1,10 @@
-const { SlashCommandBuilder, ModalBuilder, TextInputBuilder, TextInputStyle } = require('discord.js');
+const { SlashCommandBuilder, ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder } = require('discord.js');
 
+const modalTitle = "📜diary";
 const parameters = [
-  { name: "👟ランニング", unit: "分" },
-  { name: "📚読書", unit: "分" },
-  { name: "📖英単語", unit: "単語" }
+  { id: "running", name: "👟ランニング", unit: "分" },
+  { id: "reading", name: "📚読書", unit: "分" },
+  { id: "eng-words", name: "📖英単語", unit: "単語" }
 ]
 
 module.exports = {
@@ -14,17 +15,17 @@ module.exports = {
     try {
       const modal = new ModalBuilder()
         .setCustomId("log")
-        .setTitle("📜diary📜");
+        .setTitle(modalTitle);
 
-      parameters.forEach((parameter, index) => {
+      parameters.forEach((parameter) => {
         let input = new TextInputBuilder()
-          .setCustomId(`log_${index}`)
+          .setCustomId(`log_${parameter.id}`)
           .setLabel(`${parameter.name} (単位：${parameter.unit})`)
           .setStyle(TextInputStyle.Short);
 
-        let actionRow = modal.addActionRow();
+        let actionRow = new ActionRowBuilder();
         actionRow.addComponents(input);
-        modal.addActionRow(actionRow);
+        modal.addComponents(actionRow);
       })
 
       await interaction.showModal(modal);
