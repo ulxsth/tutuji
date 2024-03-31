@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const { Client, Collection, Events, GatewayIntentBits } = require('discord.js');
+const { parameters } = require('./commands/core/log');
 
 require('dotenv').config();
 const token = process.env.TOKEN;
@@ -52,8 +53,13 @@ client.on(Events.InteractionCreate, async interaction => {
   if (interaction.customId !== 'log') return;
 
   // todo: send data to notion database
+  let content = "データを記録しました :coffee: \n";
+  parameters.forEach((parameter) => {
+    const value = interaction.fields.getTextInputValue(`log_${parameter.id}`);
+    content += `${parameter.name}: ${value} ${parameter.unit}\n`;
+  });
   try {
-    await interaction.reply({ content: 'データを記録しました :coffee:', ephemeral: true });
+    await interaction.reply({ content: content, ephemeral: true });
   } catch (error) {
     console.error(error);
     await interaction.reply({ content: `ERR: ${error}`, ephemeral: true });
