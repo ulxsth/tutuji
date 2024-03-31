@@ -8,6 +8,7 @@ const parameters = [
 ]
 
 module.exports = {
+  parameters,   // refactor: separate file
   data: new SlashCommandBuilder()
     .setName('log')
     .setDescription('Logs daily record'),
@@ -17,6 +18,7 @@ module.exports = {
         .setCustomId("log")
         .setTitle(modalTitle);
 
+      // todo: validate
       parameters.forEach((parameter) => {
         let input = new TextInputBuilder()
           .setCustomId(`log_${parameter.id}`)
